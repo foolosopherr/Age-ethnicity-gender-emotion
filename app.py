@@ -10,9 +10,11 @@ from aegclass import MultilabelCNN
 
 st.title('Age, ethnicity, gender and emotion classifiaction')
 st.write('\n')
-st.header('You can upload an image of one or more people')
+st.header('You can upload a photo of one or more people or simply take one through webcam')
 
-image = st.file_uploader('Upload')
+
+camera_image = st.camera_input('Take your own photo')
+image = st.file_uploader('Upload photo')
 
 model_age = torch.load('model age.pt', map_location=torch.device('cpu'))
 model_emotion = torch.load('model emotion.pt', map_location=torch.device('cpu'))
@@ -95,13 +97,20 @@ def cv2_face_extractor(image):
             st.write(result)
 
 
-if image:
-    st.header('Original image')
+if camera_image:
+    st.header('Original webcam photo')
+    st.image(camera_image)
+    st.write('\n')
+    st.write('\n')
+    
+    cv2_face_extractor(camera_image)
+
+elif image:
+    st.header('Original photo')
     st.image(image)
     st.write('\n')
     st.write('\n')
     
     cv2_face_extractor(image)
-
 else:
-    st.write('I am waiting for image')
+    st.write('I am waiting for photo')
